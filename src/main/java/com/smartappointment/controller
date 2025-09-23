@@ -1,0 +1,419 @@
+package com.smartappointment.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import com.smartappointment.model.User;
+import com.smartappointment.service.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import java.util.Map;
+
+import jakarta.validation.Valid;
+import java.util.List;
+
+// Remove the @SpringBootApplication annotation from here
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+        return ResponseEntity.ok(userService.saveUser(user));
+    }
+
+    @GetMapping
+    public List<User> getUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        return userService.getUserById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/test")
+    public String testEndpoint() {
+        return "UserController is working!";
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ AdminController ------------------
+@RestController
+@RequestMapping("/api/admins")
+public class AdminController {
+
+    @Autowired
+    private AdminService adminService;
+
+    @PostMapping
+    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
+        return ResponseEntity.ok(adminService.saveAdmin(admin));
+    }
+
+    @GetMapping
+    public List<Admin> getAdmins() {
+        return adminService.getAllAdmins();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Admin> getAdminById(@PathVariable Long id) {
+        return adminService.getAdminById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) {
+        adminService.deleteAdmin(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ BookingController ------------------
+@RestController
+@RequestMapping("/api/bookings")
+public class BookingController {
+
+    @Autowired
+    private BookingService bookingService;
+
+    @PostMapping
+    public ResponseEntity<Bookings> createBooking(@RequestBody Bookings booking) {
+        return ResponseEntity.ok(bookingService.saveBooking(booking));
+    }
+
+    @GetMapping
+    public List<Bookings> getBookings() {
+        return bookingService.getAllBookings();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Bookings> getBookingById(@PathVariable Long id) {
+        return bookingService.getBookingById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
+        bookingService.deleteBooking(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ ServiceProviderController ------------------
+@RestController
+@RequestMapping("/api/service-providers")
+public class ServiceProviderController {
+
+    @Autowired
+    private ServiceProviderService serviceProviderService;
+
+    @PostMapping
+    public ResponseEntity<ServiceProvider> createServiceProvider(@RequestBody ServiceProvider serviceProvider) {
+        return ResponseEntity.ok(serviceProviderService.saveServiceProvider(serviceProvider));
+    }
+
+    @GetMapping
+    public List<ServiceProvider> getServiceProviders() {
+        return serviceProviderService.getAllServiceProviders();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ServiceProvider> getServiceProviderById(@PathVariable Long id) {
+        return serviceProviderService.getServiceProviderById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteServiceProvider(@PathVariable Long id) {
+        serviceProviderService.deleteServiceProvider(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ PaymentsController ------------------
+@RestController
+@RequestMapping("/api/payments")
+public class PaymentsController {
+
+    @Autowired
+    private PaymentsService paymentsService;
+
+    @PostMapping
+    public ResponseEntity<Payments> createPayment(@RequestBody Payments payment) {
+        return ResponseEntity.ok(paymentsService.savePayment(payment));
+    }
+
+    @GetMapping
+    public List<Payments> getPayments() {
+        return paymentsService.getAllPayments();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Payments> getPaymentById(@PathVariable Long id) {
+        return paymentsService.getPaymentById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
+        paymentsService.deletePayment(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ LocationController ------------------
+@RestController
+@RequestMapping("/api/locations")
+public class LocationController {
+
+    @Autowired
+    private LocationService locationService;
+
+    @PostMapping
+    public ResponseEntity<Location> createLocation(@RequestBody Location location) {
+        return ResponseEntity.ok(locationService.saveLocation(location));
+    }
+
+    @GetMapping
+    public List<Location> getLocations() {
+        return locationService.getAllLocations();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Location> getLocationById(@PathVariable Long id) {
+        return locationService.getLocationById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
+        locationService.deleteLocation(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ ServicesController ------------------
+@RestController
+@RequestMapping("/api/services")
+public class ServicesController {
+
+    @Autowired
+    private ServicesService servicesService;
+
+    @PostMapping
+    public ResponseEntity<Services> createService(@RequestBody Services service) {
+        return ResponseEntity.ok(servicesService.saveService(service));
+    }
+
+    @GetMapping
+    public List<Services> getServices() {
+        return servicesService.getAllServices();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Services> getServiceById(@PathVariable Long id) {
+        return servicesService.getServiceById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public List<Services> searchServicesByName(@RequestParam String name) {
+        return servicesService.getServicesByName(name);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteService(@PathVariable Long id) {
+        servicesService.deleteService(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ ReviewsController ------------------
+@RestController
+@RequestMapping("/api/reviews")
+public class ReviewsController {
+
+    @Autowired
+    private ReviewsService reviewsService;
+
+    @PostMapping
+    public ResponseEntity<Reviews> createReview(@RequestBody Reviews review) {
+        return ResponseEntity.ok(reviewsService.saveReview(review));
+    }
+
+    @GetMapping
+    public List<Reviews> getReviews() {
+        return reviewsService.getAllReviews();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Reviews> getReviewById(@PathVariable Long id) {
+        return reviewsService.getReviewById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/provider/{providerId}")
+    public List<Reviews> getReviewsByProvider(@PathVariable Long providerId) {
+        ServiceProvider provider = new ServiceProvider();
+        provider.setSpId(providerId);
+        return reviewsService.getReviewsByProvider(provider);
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public List<Reviews> getReviewsByCustomer(@PathVariable Long customerId) {
+        User customer = new User();
+        customer.setUId(customerId);
+        return reviewsService.getReviewsByCustomer(customer);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
+        reviewsService.deleteReview(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ NotificationsController ------------------
+@RestController
+@RequestMapping("/api/notifications")
+public class NotificationsController {
+
+    @Autowired
+    private NotificationsService notificationsService;
+
+    @PostMapping
+    public ResponseEntity<Notifications> createNotification(@RequestBody Notifications notification) {
+        return ResponseEntity.ok(notificationsService.saveNotification(notification));
+    }
+
+    @GetMapping
+    public List<Notifications> getNotifications() {
+        return notificationsService.getAllNotifications();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Notifications> getNotificationById(@PathVariable Long id) {
+        return notificationsService.getNotificationById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Notifications> getNotificationsByUser(@PathVariable Long userId) {
+        User user = new User();
+        user.setUId(userId);
+        return notificationsService.getNotificationsByUser(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable Long id) {
+        notificationsService.deleteNotification(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ InvoicesController ------------------
+@RestController
+@RequestMapping("/api/invoices")
+public class InvoicesController {
+
+    @Autowired
+    private InvoicesService invoicesService;
+
+    @PostMapping
+    public ResponseEntity<Invoices> createInvoice(@RequestBody Invoices invoice) {
+        return ResponseEntity.ok(invoicesService.saveInvoice(invoice));
+    }
+
+    @GetMapping
+    public List<Invoices> getInvoices() {
+        return invoicesService.getAllInvoices();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Invoices> getInvoiceById(@PathVariable Long id) {
+        return invoicesService.getInvoiceById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/booking/{bookingId}")
+    public ResponseEntity<Invoices> getInvoiceByBooking(@PathVariable Long bookingId) {
+        Bookings booking = new Bookings();
+        booking.setBId(bookingId);
+        return invoicesService.getInvoiceByBooking(booking)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteInvoice(@PathVariable Long id) {
+        invoicesService.deleteInvoice(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+
+// ------------------ CancellationController ------------------
+@RestController
+@RequestMapping("/api/cancellations")
+public class CancellationController {
+
+    @Autowired
+    private CancellationService cancellationService;
+
+    @PostMapping
+    public ResponseEntity<Cancellation> createCancellation(@RequestBody Cancellation cancellation) {
+        return ResponseEntity.ok(cancellationService.saveCancellation(cancellation));
+    }
+
+    @GetMapping
+    public List<Cancellation> getCancellations() {
+        return cancellationService.getAllCancellations();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Cancellation> getCancellationById(@PathVariable Long id) {
+        return cancellationService.getCancellationById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/booking/{bookingId}")
+    public ResponseEntity<Cancellation> getCancellationByBooking(@PathVariable Long bookingId) {
+        Bookings booking = new Bookings();
+        booking.setBId(bookingId);
+        return cancellationService.getCancellationByBooking(booking)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCancellation(@PathVariable Long id) {
+        cancellationService.deleteCancellation(id);
+        return ResponseEntity.noContent().build();
+    }
+}

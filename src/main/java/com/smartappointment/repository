@@ -1,0 +1,76 @@
+package com.smartappointment.repository;
+
+import com.smartappointment.model.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+// ================= USER REPO =================
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
+}
+
+// ================= ADMIN REPO =================
+@Repository
+public interface AdminRepository extends JpaRepository<Admin, Long> {
+    Optional<Admin> findByEmail(String email);
+}
+
+// ================= SERVICE PROVIDER REPO =================
+@Repository
+public interface ServiceProviderRepository extends JpaRepository<ServiceProvider, Long> {
+    Optional<ServiceProvider> findByUser(User user);
+}
+
+// ================= BOOKINGS REPO =================
+@Repository
+public interface BookingRepository extends JpaRepository<Bookings, Long> {
+    List<Bookings> findByCustomer(User customer);
+    List<Bookings> findByProvider(ServiceProvider provider);
+}
+
+// ================= PAYMENTS REPO =================
+@Repository
+public interface PaymentsRepository extends JpaRepository<Payments, Long> {
+    Optional<Payments> findByBooking(Bookings booking);
+}
+
+// ================= SERVICES REPO =================
+@Repository
+public interface ServicesRepository extends JpaRepository<Services, Long> {
+    List<Services> findByNameContaining(String name);
+}
+
+// ================= REVIEWS REPO =================
+@Repository
+public interface ReviewsRepository extends JpaRepository<Reviews, Long> {
+    List<Reviews> findByProvider(ServiceProvider provider);
+    List<Reviews> findByCustomer(User customer);
+}
+
+// ================= NOTIFICATIONS REPO =================
+@Repository
+public interface NotificationsRepository extends JpaRepository<Notifications, Long> {
+    List<Notifications> findByUser(User user);
+}
+
+// ================= INVOICES REPO =================
+@Repository
+public interface InvoicesRepository extends JpaRepository<Invoices, Long> {
+    Optional<Invoices> findByBooking(Bookings booking);
+}
+
+// ================= CANCELLATIONS REPO =================
+@Repository
+public interface CancellationRepository extends JpaRepository<Cancellation, Long> {
+    Optional<Cancellation> findByBooking(Bookings booking);
+}
+
+// ================= LOCATION REPO =================
+@Repository
+public interface LocationRepository extends JpaRepository<Location, Long> {
+    List<Location> findByCityContaining(String city);
+}

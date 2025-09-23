@@ -1,0 +1,328 @@
+package com.smartappointment.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+package com.smartappointment.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+@Entity
+@Table(name = "User") // Make sure this matches your actual table name in the database
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "U_ID")
+    private Long uId;
+
+    @NotBlank(message = "Name is required")
+    @Column(name = "Name")
+    private String name;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
+    @Column(name = "Email", unique = true)
+    private String email;
+
+    @NotBlank(message = "Phone number is required")
+    @Column(name = "Phone_no")
+    private String phoneNo;
+
+    @NotNull(message = "User type is required")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "UserType")
+    private UserType userType;
+
+    // Default constructor
+    public User() {
+    }
+
+    // Getters and setters
+    public Long getUId() {
+        return uId;
+    }
+
+    public void setUId(Long uId) {
+        this.uId = uId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    // UserType enum
+    public enum UserType {
+        Customer, ServiceProvider
+    }
+}
+@Entity
+@Table(name = "Admin")
+class Admin {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long aId;
+
+    private String name;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    private String phone;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    private String password;
+}
+
+
+@Entity
+@Table(name = "service_providers")
+class ServiceProvider {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long spId;
+
+    @OneToOne
+    @JoinColumn(name = "uId", unique = true)
+    private User user;
+
+    private String specialization;
+
+    private Boolean availability;
+
+    @ManyToOne
+    @JoinColumn(name = "approvedBy")
+    private Admin approvedBy;
+}
+
+@Entity
+@Table(name = "services")
+class Services {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long sId;
+
+    private String name;
+    private String description;
+
+    @NotNull
+    private BigDecimal price;
+}
+
+@Entity
+@Table(name = "bookings")
+class Bookings {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long bId;
+
+    @ManyToOne
+    @JoinColumn(name = "customerId", nullable = false)
+    private User customer;
+
+    @ManyToOne
+    @JoinColumn(name = "providerId", nullable = false)
+    private ServiceProvider provider;
+
+    @ManyToOne
+    @JoinColumn(name = "sId", nullable = false)
+    private Services service;
+
+    @NotNull
+    private LocalDate bookingDate;
+
+    @NotNull
+    private LocalTime bookingTime;
+
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
+}
+
+@Entity
+@Table(name = "payments")
+class Payments {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long pId;
+
+    @OneToOne
+    @JoinColumn(name = "bId", unique = true, nullable = false)
+    private Bookings booking;
+
+    @ManyToOne
+    @JoinColumn(name = "customerId", nullable = false)
+    private User customer;
+
+    @NotNull
+    private BigDecimal amount;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+
+    @CreationTimestamp
+    private LocalDateTime paymentDate;
+}
+
+@Entity
+@Table(name = "reviews")
+class Reviews {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long rId;
+
+    @ManyToOne
+    @JoinColumn(name = "customerId", nullable = false)
+    private User customer;
+
+    @ManyToOne
+    @JoinColumn(name = "providerId", nullable = false)
+    private ServiceProvider provider;
+
+    @NotNull
+    @Min(1)
+    @Max(5)
+    private int rating;
+
+    private String comments;
+
+    @CreationTimestamp
+    private LocalDateTime reviewDate;
+}
+
+@Entity
+@Table(name = "notifications")
+class Notifications {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long nId;
+
+    @ManyToOne
+    @JoinColumn(name = "uId", nullable = false)
+    private User user;
+
+    @NotNull
+    private String message;
+
+    @CreationTimestamp
+    private LocalDateTime sentAt;
+}
+
+@Entity
+@Table(name = "invoices")
+class Invoices {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long iId;
+
+    @ManyToOne
+    @JoinColumn(name = "uId", nullable = false)
+    private User user;
+
+    @OneToOne
+    @JoinColumn(name = "bId", unique = true, nullable = false)
+    private Bookings booking;
+
+    @NotNull
+    private BigDecimal amount;
+
+    @CreationTimestamp
+    private LocalDateTime date;
+}
+
+@Entity
+@Table(name = "cancellations")
+class Cancellation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long cId;
+
+    @OneToOne
+    @JoinColumn(name = "bId", unique = true, nullable = false)
+    private Bookings booking;
+
+    private BigDecimal refundAmount;
+
+    @CreationTimestamp
+    private LocalDateTime date;
+}
+
+@Entity
+@Table(name = "locations")
+class Location {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long lId;
+
+    private String city;
+    private String country;
+    private String address;
+}
+
+// ENUMS
+enum Role {
+    SUPER_ADMIN,
+    SUPPORT_ADMIN
+}
+
+enum UserType {
+    CUSTOMER,
+    SERVICE_PROVIDER
+}
+
+enum BookingStatus {
+    PENDING,
+    CONFIRMED,
+    CANCELLED
+}
+
+enum PaymentMethod {
+    CREDIT_CARD,
+    DEBIT_CARD,
+    UPI,
+    NET_BANKING,
+    CASH
+}
+
+enum PaymentStatus {
+    SUCCESS,
+    FAILED,
+    PENDING
+}

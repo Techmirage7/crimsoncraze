@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Appointment System</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Smart Appointment System</h1>
+        <nav>
+            <ul>
+                <li><a href="#appointments">Appointments</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#payments">Payments</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- Appointments Section -->
+        <section id="appointments">
+            <h2>Your Appointments</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Service</th>
+                        <th>Provider</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="appointments-table">
+                    <!-- Appointment data will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services">
+            <h2>Available Services</h2>
+            <ul id="services-list">
+                <!-- Services data will be dynamically loaded here -->
+            </ul>
+        </section>
+
+        <!-- Payments Section -->
+        <section id="payments">
+            <h2>Payment History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="payments-table">
+                    <!-- Payment data will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Reviews Section -->
+        <section id="reviews">
+            <h2>Your Reviews</h2>
+            <ul id="reviews-list">
+                <!-- Reviews data will be dynamically loaded here -->
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Smart Appointment System</p>
+    </footer>
+    <script src="js/app.js"></script>
+</body>
+</html>
